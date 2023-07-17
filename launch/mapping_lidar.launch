@@ -1,0 +1,36 @@
+<launch>
+	
+	<master auto="start"/>
+	
+	<!-- my node -->
+	<node pkg="second_project" type = "tf_publisher" name = "tf_publisher" output="screen" />
+	
+	<!-- simulation time -->
+	<param name="/use_sim_time" value="true" />
+	
+	<!-- Run the node that converts data from lidar scan to laser scan -->
+	<node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" output="screen">
+        <remap from="cloud_in" to="/velodyne_points"/>
+        <remap from="scan" to="/scan_conv"/>
+        <param name="min_height" value="0.2"/>
+        <param name="max_height" value="0.6"/>
+        <param name="angle_increment" value="0.0034"/>
+        <param name="range_max" value="20.0"/>
+    </node>
+	
+	<!-- static tf -->
+	<node pkg="tf" type="static_transform_publisher" name="odomt265" args="0.0 0.0 0.0 0.0 0.0 0.0 odom t265 100" />
+	<node pkg="tf" type="static_transform_publisher" name="front_left" args="0.3 0.2 0.0 0.0 0.0 0.0 base_link fl 100" />
+	<node pkg="tf" type="static_transform_publisher" name="front_right" args="0.3 -0.2 0.0 0.0 0.0 0.0 base_link fr 100" />
+	<node pkg="tf" type="static_transform_publisher" name="rear_right" args="-0.3 -0.2 0.0 0.0 0.0 0.0 base_link rr 100" />
+	<node pkg="tf" type="static_transform_publisher" name="rear_left" args="-0.3 0.2 0.0 0.0 0.0 0.0 base_link rl 100" />
+  
+	<!-- Run slam_toolbox -->
+	<node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+		<rosparam command="load" file="$(find second_project)/cfg/st_config_lidar.yaml" />
+	</node>
+  
+	<!-- Run RViz  -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/config_mapping.rviz"/>
+ 
+</launch>

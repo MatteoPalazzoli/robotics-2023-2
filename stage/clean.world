@@ -1,0 +1,44 @@
+include "turtlebot.inc"
+
+define floorplan model
+(
+  # sombre, sensible, artistic
+  color "gray30"
+
+  # most maps will need a bounding box
+  boundary 1
+
+  gui_nose 1
+  gui_grid 1
+  gui_outline 1
+  ranger_return 1.0
+)
+
+resolution 0.05
+interval_sim 100  # simulation timestep in milliseconds
+
+window
+(
+  size [ 500.0 700.0 ]
+  center [ -0.0448083 -7.145396 ]
+  rotate [ 0.0 0.0 ]
+  scale 30
+)
+
+floorplan
+(
+  name "clean"
+  bitmap "clean.png"
+  size [ 17.35 26.1 4.0 ]
+  pose [0.0 0.0 0.0 0.0]
+)
+
+# throw in a robot
+mybot
+(
+  pose [ -0.0448083 -7.145396 0.0 0.0 ]
+  name "mybot"
+  color "green"
+)
+
+

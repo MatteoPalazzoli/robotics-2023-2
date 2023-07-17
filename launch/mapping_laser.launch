@@ -1,0 +1,26 @@
+<launch>
+	
+	<master auto="start"/>
+	
+	<!-- my node -->
+	<node pkg="second_project" type = "tf_publisher" name = "tf_publisher" output="screen" />
+	
+	<!-- simulation time -->
+	<param name="/use_sim_time" value="true" />
+	
+	<!-- static tf -->
+	<node pkg="tf" type="static_transform_publisher" name="odomt265" args="0.0 0.0 0.0 0.0 0.0 0.0 odom t265 100" />
+	<node pkg="tf" type="static_transform_publisher" name="front_left" args="0.3 0.2 0.0 0.0 0.0 0.0 base_link fl 100" />
+	<node pkg="tf" type="static_transform_publisher" name="front_right" args="0.3 -0.2 0.0 0.0 0.0 0.0 base_link fr 100" />
+	<node pkg="tf" type="static_transform_publisher" name="rear_right" args="-0.3 -0.2 0.0 0.0 0.0 0.0 base_link rr 100" />
+	<node pkg="tf" type="static_transform_publisher" name="rear_left" args="-0.3 0.2 0.0 0.0 0.0 0.0 base_link rl 100" />
+	
+	<!-- Run slam_toolbox -->
+	<node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+	<rosparam command="load" file="$(find second_project)/cfg/st_config_laser.yaml" />
+	</node>
+  
+	<!-- Run RViz  -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find second_project)/config_mapping.rviz"/>
+ 
+</launch>
