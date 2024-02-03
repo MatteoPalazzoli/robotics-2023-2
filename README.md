@@ -19,4 +19,4 @@ for i in range(N) :
   3. wait for result
   4. get result
 ```
-Read the waypoints from a XML file, in this format: `x,y,heading` (heading in degrees)
+Read the waypoints from a CSV file, in this format: `x,y,heading` (heading in degrees)
